@@ -13,16 +13,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CsPractice5
+namespace NaUKMA.CS.Practice05
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for TaskManagerWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class TaskManagerWindow : Window
     {
-        public MainWindow()
+        public TaskManagerWindow()
         {
             InitializeComponent();
+            DataContext = new TaskManagerVm();
         }
     }
 }

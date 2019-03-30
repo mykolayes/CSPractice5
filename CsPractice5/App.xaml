@@ -1,8 +1,8 @@
-﻿<Application x:Class="CsPractice5.App"
+﻿<Application x:Class="NaUKMA.CS.Practice05.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:CsPractice5"
-             StartupUri="MainWindow.xaml">
+             xmlns:local="clr-namespace:NaUKMA.CS.Practice05"
+             StartupUri="TaskManagerWindow.xaml">
     <Application.Resources>
          
     </Application.Resources>
