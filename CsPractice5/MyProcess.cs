@@ -98,12 +98,57 @@ namespace NaUKMA.CS.Practice05
 
         #endregion
 
+        #region ProcessOwner
+
+        public String ProcessOwner
+        {
+            get { return _processOwner; }
+            set
+            {
+                _processOwner = value;
+                OnPropertyChanged("ProcessOwner");
+            }
+        }
+        private String _processOwner;
+
+        #endregion
+
+        #region CpuPercent
+
+        public Double CpuPercent
+        {
+            get { return _cpuPercent; }
+            set
+            {
+                _cpuPercent = value;
+                OnPropertyChanged("CpuPercent");
+            }
+        }
+        private Double _cpuPercent;
+
+        #endregion
+
+        #region RamMB
+
+        public Double RamMB
+        {
+            get { return _ramMB; }
+            set
+            {
+                _ramMB = value;
+                OnPropertyChanged("RamMB");
+            }
+        }
+        private Double _ramMB;
+
+        #endregion
+
         private MyProcess()
         {
 
         }
 
-        public MyProcess(string processName, int processId, bool processResponding, int threadsCount, DateTime? startTime, string fileName)
+        public MyProcess(string processName, int processId, bool processResponding, int threadsCount, DateTime? startTime, string fileName, string processOwner, double cpuPercent, double ramMb)
         {
             ProcessName = processName;
             ProcessId = processId;
@@ -111,7 +156,12 @@ namespace NaUKMA.CS.Practice05
             ThreadsCount = threadsCount;
             StartTime = startTime;
             FileName = fileName;
+            ProcessOwner = processOwner;
+            CpuPercent = cpuPercent;
+            RamMB = ramMb;
         }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

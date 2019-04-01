@@ -7,7 +7,15 @@
         mc:Ignorable="d"
         Title="TaskManagerWindow" Height="450" Width="800">
     <Grid>
-        <DataGrid ItemsSource="{Binding Processes}" SelectedItem="{Binding SelectedProcess}" SelectionMode="Single" AutoGenerateColumns="False"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="300" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="200" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <DataGrid Grid.Row="0" ItemsSource="{Binding Processes}" SelectedItem="{Binding SelectedProcess}" SelectionMode="Single" AutoGenerateColumns="False"
                   ScrollViewer.CanContentScroll="True" 
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto">
@@ -18,9 +26,45 @@
                 <DataGridTextColumn Header="# of threads" Binding="{Binding ThreadsCount, Mode=OneWay}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Start time" Binding="{Binding StartTime, Mode=OneWay}"></DataGridTextColumn>
                 <DataGridTextColumn Header="File path" Binding="{Binding FileName, Mode=OneWay}"></DataGridTextColumn>
-                <!--<DataGridTextColumn Header="CPU %" Binding="{Binding x, Mode=OneWay}"></DataGridTextColumn>-->
-
+                <DataGridTextColumn Header="Process owner" Binding="{Binding ProcessOwner, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="CPU, %" Binding="{Binding CpuPercent, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="RAM, MB" Binding="{Binding RamMB, Mode=OneWay}"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" x:Name="DeleteUserButton" Margin="5,3" Content="Stop selected process" Command="{Binding Path=StopProcessCommand}"/>
+            <Button Grid.Column="1" x:Name="OpenFolderButton" Margin="5,3" Content="Open process folder" Command="{Binding Path=OpenFolderCommand}"/>
+            <Button Grid.Column="2" x:Name="ShowModulesButton" Margin="5,3" Content="Show used modules" Command="{Binding Path=ShowModulesCommand}"/>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid Grid.Column="0" ItemsSource="{Binding CurrentModulesList}" SelectionMode="Single" AutoGenerateColumns="False"
+                      ScrollViewer.CanContentScroll="True" 
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Used modules info" Binding="{Binding Mode=OneWay}"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </Window>
