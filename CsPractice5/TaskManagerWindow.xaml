@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NaUKMA.CS.Practice05"
         mc:Ignorable="d"
-        Title="TaskManagerWindow" Height="450" Width="800">
+        Title="TaskManagerWindow" Height="565" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="300" />
@@ -46,6 +46,7 @@
             <Button Grid.Column="0" x:Name="DeleteUserButton" Margin="5,3" Content="Stop selected process" Command="{Binding Path=StopProcessCommand}"/>
             <Button Grid.Column="1" x:Name="OpenFolderButton" Margin="5,3" Content="Open process folder" Command="{Binding Path=OpenFolderCommand}"/>
             <Button Grid.Column="2" x:Name="ShowModulesButton" Margin="5,3" Content="Show used modules" Command="{Binding Path=ShowModulesCommand}"/>
+            <Button Grid.Column="3" x:Name="ShowThreadsButton" Margin="5,3" Content="Show used threads" Command="{Binding Path=ShowThreadsCommand}"/>
         </Grid>
 
         <Grid Grid.Row="2">
@@ -63,6 +64,17 @@
                       ScrollViewer.HorizontalScrollBarVisibility="Auto">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Used modules info" Binding="{Binding Mode=OneWay}"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <DataGrid Grid.Column="1" ItemsSource="{Binding CurrentThreadsList}" SelectionMode="Single" AutoGenerateColumns="False"
+                      ScrollViewer.CanContentScroll="True" 
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Thread ID" Binding="{Binding Id, Mode=OneWay}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Thread state" Binding="{Binding ThreadState, Mode=OneWay}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Thread start time" Binding="{Binding StartTime, Mode=OneWay}"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

@@ -80,6 +80,21 @@ namespace NaUKMA.CS.Practice05
             }
         }
 
+        private ICommand _showThreadsCommand;
+
+        public ICommand ShowThreadsCommand
+        {
+            get
+            {
+                return _showThreadsCommand ?? (_showThreadsCommand = new RelayCommand<object>(
+                           async o =>
+                           {
+                               await Task.Run(() => ShowUsedThreads());
+
+                           }, o => ProcessSelectedCommand()));
+            }
+        }
+
         #endregion
 
         #region Processes
@@ -96,26 +111,37 @@ namespace NaUKMA.CS.Practice05
 
                 if (!(SelectedProcess is null))
                 {
-                    bool ch = false;
-                    for(int i = 0; i < _processes.Count; i++)
+                    bool selectedProcessStillAlive = false;
+                    var currentModulesListTmp = CurrentModulesList;
+                    var currentThreadsListTmp = CurrentThreadsList;
+                    for (int i = 0; i < _processes.Count; i++)
                     {
                         MyProcess pr = _processes[i];
                         if (pr.ProcessId.Equals(SelectedProcess.ProcessId))
                         {
                             SelectedProcess = pr;
-                            ch = true;
+                            selectedProcessStillAlive = true;
                             break;
                         }
                     }
 
-                    if (ch.Equals(false))
+                    if (selectedProcessStillAlive.Equals(false))
                     {
                         SelectedProcess = null;
-                        CurrentModulesList = null;
+                        //CurrentModulesList = null;
+                        //CurrentThreadsList = null;
                     }
                     else
-                    {
-                        ShowUsedModules();
+                    { //show use modules/threads again after updating the processes list (if they were shown before the update was initiated)
+                        if (!(currentModulesListTmp is null))
+                        {
+                            ShowUsedModules();
+                        }
+
+                        if (!(currentThreadsListTmp is null))
+                        {
+                            ShowUsedThreads();
+                        }
                     }
                 }
 
@@ -160,38 +186,38 @@ namespace NaUKMA.CS.Practice05
 
             for (int i = 0; i < currentProcessesArray.Length; i++)
             {
-                    Process pr = currentProcessesArray[i];
-                    //null is a flag that some process was probably stopped, and there is no need to display it.
-                    if (countersCPU[i] is null || countersRAM[i] is null)
-                    {
-                        continue;
-                    }
-                    Double cpuLoad = Math.Round(countersCPU[i].NextValue() / Environment.ProcessorCount, 2);
-                    Double ramUsed = Math.Round(countersRAM[i].NextValue() / 1024 / 1024, 2);
-                    DateTime? startTime;
-                    string fileName;
-                    try
-                    {
-                        startTime = pr.StartTime;
-                    }
-                    catch (Exception)
-                    {
-                        startTime = null;
-                    }
+                Process pr = currentProcessesArray[i];
+                //null is a flag that some process was probably stopped, and there is no need to display it.
+                if (countersCPU[i] is null || countersRAM[i] is null)
+                {
+                    continue;
+                }
+                Double cpuLoad = Math.Round(countersCPU[i].NextValue() / Environment.ProcessorCount, 2);
+                Double ramUsed = Math.Round(countersRAM[i].NextValue() / 1024 / 1024, 2);
+                DateTime? startTime;
+                string fileName;
+                try
+                {
+                    startTime = pr.StartTime;
+                }
+                catch (Exception)
+                {
+                    startTime = null;
+                }
 
-                    try
-                    {
-                        fileName = pr.MainModule.FileName;
-                    }
-                    catch (Exception)
-                    {
-                        fileName = null;
-                    }
+                try
+                {
+                    fileName = pr.MainModule.FileName;
+                }
+                catch (Exception)
+                {
+                    fileName = null;
+                }
 
-                    string processOwner = GetProcessOwner(pr);
+                string processOwner = GetProcessOwner(pr);
 
-                    newProcesses.Add(new MyProcess(pr.ProcessName, pr.Id, pr.Responding, pr.Threads.Count, startTime,
-                        fileName, processOwner, cpuLoad, ramUsed));
+                newProcesses.Add(new MyProcess(pr.ProcessName, pr.Id, pr.Responding, pr.Threads.Count, startTime,
+                    fileName, processOwner, cpuLoad, ramUsed));
             }
 
             return newProcesses;
@@ -207,10 +233,10 @@ namespace NaUKMA.CS.Practice05
             while (true)
             {
                 ObservableCollection<MyProcess> newProcesses = GetRefreshedProcesses().Result;
-                await App.Current.Dispatcher.BeginInvoke((Action) delegate
-                {
-                    Processes = newProcesses;
-                });
+                await App.Current.Dispatcher.BeginInvoke((Action)delegate
+               {
+                   Processes = newProcesses;
+               });
                 Thread.Sleep(5000);
             }
         }
@@ -265,6 +291,7 @@ namespace NaUKMA.CS.Practice05
 
                 _selectedProcess = value;
                 CurrentModulesList = null;
+                CurrentThreadsList = null;
                 //}
                 OnPropertyChanged(nameof(SelectedProcess));
             }
@@ -292,7 +319,6 @@ namespace NaUKMA.CS.Practice05
                 Processes.Remove(SelectedProcess);
             });
             SelectedProcess = null;
-            //await UpdateProcessesList();
         }
 
         private static void KillProcessAndChildren(int pid)
@@ -343,6 +369,24 @@ namespace NaUKMA.CS.Practice05
             {
                 //x86 process can not access x64 modules
             }
+        }
+
+        public ProcessThreadCollection CurrentThreadsList
+        {
+            get { return _currentThreadsList; }
+            set
+            {
+                _currentThreadsList = value;
+                OnPropertyChanged(nameof(CurrentThreadsList));
+            }
+        }
+
+        private ProcessThreadCollection _currentThreadsList;
+
+        private async Task ShowUsedThreads()
+        {
+            Process pr = Process.GetProcessById(SelectedProcess.ProcessId);
+            CurrentThreadsList = pr.Threads;
         }
 
         #endregion
