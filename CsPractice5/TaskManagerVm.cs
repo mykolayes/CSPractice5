@@ -169,7 +169,7 @@ namespace NaUKMA.CS.Practice05
                     countersCPU.Add(cpu);
                     countersRAM.Add(ram);
                 }
-                catch (Exception)
+                catch (Exception) //InvalidOperationException
                 {
                     //try-catch to suppress possible null pointer/arg exceptions due to stopped/changed process during the foreach process.
                     countersCPU.Add(null);
@@ -251,7 +251,7 @@ namespace NaUKMA.CS.Practice05
                {
                    Processes = newProcesses;
                });
-                Thread.Sleep(5000);
+                Thread.Sleep(4000);
             }
         }
 
