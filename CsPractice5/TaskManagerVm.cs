@@ -183,13 +183,24 @@ namespace NaUKMA.CS.Practice05
             for (int i = 0; i < currentProcessesArray.Length; i++)
             {
                 Process pr = currentProcessesArray[i];
-                //null is a flag that some process was probably stopped, and there is no need to display it.
+                //null is a flag that some process was probably stopped, and there is no need to display it; *might be redundant!*
                 if (countersCPU[i] is null || countersRAM[i] is null)
                 {
                     continue;
                 }
-                Double cpuLoad = Math.Round(countersCPU[i].NextValue() / Environment.ProcessorCount, 2);
-                Double ramUsed = Math.Round(countersRAM[i].NextValue() / 1024 / 1024, 2);
+
+                Double cpuLoad;
+                Double ramUsed;
+
+                try
+                {
+                    cpuLoad = Math.Round(countersCPU[i].NextValue() / Environment.ProcessorCount, 2);
+                    ramUsed = Math.Round(countersRAM[i].NextValue() / 1024 / 1024, 2);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
                 DateTime? startTime;
                 string fileName;
                 try
@@ -221,7 +232,14 @@ namespace NaUKMA.CS.Practice05
 
         private async void ProcessesUpdateSetup()
         {
-            await Task.Run(() => UpdateProcessesList());
+            try
+            {
+                await Task.Run(() => UpdateProcessesList());
+            }
+            catch (System.AggregateException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
 
         private async Task UpdateProcessesList()
