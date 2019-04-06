@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Documents;
+using System.Windows;
 using System.Windows.Input;
 using NaUKMA.CS.Practice05.Annotations;
 
@@ -128,8 +128,6 @@ namespace NaUKMA.CS.Practice05
                     if (selectedProcessStillAlive.Equals(false))
                     {
                         SelectedProcess = null;
-                        //CurrentModulesList = null;
-                        //CurrentThreadsList = null;
                     }
                     else
                     { //show use modules/threads again after updating the processes list (if they were shown before the update was initiated)
@@ -154,8 +152,6 @@ namespace NaUKMA.CS.Practice05
         {
             ObservableCollection<MyProcess> newProcesses = new ObservableCollection<MyProcess>();
             Process[] currentProcessesArray = Process.GetProcesses();
-
-            //call getmetadata (simult for all), then add all conseq.
 
             var countersCPU = new List<PerformanceCounter>();
             var countersRAM = new List<PerformanceCounter>();
@@ -282,17 +278,9 @@ namespace NaUKMA.CS.Practice05
             get { return _selectedProcess; }
             set
             {
-                //if (_selectedProcess is null)
-                //{
-                //    _selectedProcess = value;
-                //}
-                //else if (!(_selectedProcess.Equals(value)))
-                //{
-
                 _selectedProcess = value;
                 CurrentModulesList = null;
                 CurrentThreadsList = null;
-                //}
                 OnPropertyChanged(nameof(SelectedProcess));
             }
         }
@@ -348,8 +336,15 @@ namespace NaUKMA.CS.Practice05
 
         private async Task OpenFolder()
         {
-            string folderPath = SelectedProcess.FileName.Substring(0, SelectedProcess.FileName.LastIndexOf("\\"));
-            Process.Start("explorer.exe", folderPath);
+            try
+            {
+                string folderPath = SelectedProcess.FileName.Substring(0, SelectedProcess.FileName.LastIndexOf("\\"));
+                Process.Start("explorer.exe", folderPath);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Could not open directory.");
+            }
         }
 
         private async Task ShowUsedModules()
