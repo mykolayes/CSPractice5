@@ -169,8 +169,9 @@ namespace NaUKMA.CS.Practice05
                     countersCPU.Add(cpu);
                     countersRAM.Add(ram);
                 }
-                catch (Exception) //InvalidOperationException
+                catch (Exception)
                 {
+                    //InvalidOperationException
                     //try-catch to suppress possible null pointer/arg exceptions due to stopped/changed process during the foreach process.
                     countersCPU.Add(null);
                     countersRAM.Add(null);
@@ -378,6 +379,10 @@ namespace NaUKMA.CS.Practice05
 
                 CurrentModulesList = mdlsList;
             }
+            catch (System.ArgumentException)
+            {
+                
+            }
             catch (Exception)
             {
                 //x86 process can not access x64 modules
@@ -398,8 +403,15 @@ namespace NaUKMA.CS.Practice05
 
         private async Task ShowUsedThreads()
         {
-            Process pr = Process.GetProcessById(SelectedProcess.ProcessId);
-            CurrentThreadsList = pr.Threads;
+            try
+            {
+                Process pr = Process.GetProcessById(SelectedProcess.ProcessId);
+                CurrentThreadsList = pr.Threads;
+            }
+            catch (System.ArgumentException)
+            {
+
+            }
         }
 
         #endregion

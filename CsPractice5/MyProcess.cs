@@ -12,7 +12,7 @@ namespace NaUKMA.CS.Practice05
         public String ProcessName
         {
             get { return _processName; }
-            set
+            private set
             {
                 _processName = value;
                 OnPropertyChanged("ProcessName");
@@ -27,7 +27,7 @@ namespace NaUKMA.CS.Practice05
         public int ProcessId
         {
             get { return _processId; }
-            set
+            private set
             {
                 _processId = value;
                 OnPropertyChanged("ProcessId");
@@ -42,7 +42,7 @@ namespace NaUKMA.CS.Practice05
         public bool ProcessResponding
         {
             get { return _processResponding; }
-            set
+            private set
             {
                 _processResponding = value;
                 OnPropertyChanged("ProcessResponding");
@@ -57,7 +57,7 @@ namespace NaUKMA.CS.Practice05
         public int ThreadsCount
         {
             get { return _threadsCount; }
-            set
+            private set
             {
                 _threadsCount = value;
                 OnPropertyChanged("ThreadsCount");
@@ -72,7 +72,7 @@ namespace NaUKMA.CS.Practice05
         public DateTime? StartTime
         {
             get { return _startTime; }
-            set
+            private set
             {
                 _startTime = value;
                 OnPropertyChanged("StartTime");
@@ -88,7 +88,7 @@ namespace NaUKMA.CS.Practice05
         public String FileName
         {
             get { return _fileName; }
-            set
+            private set
             {
                 _fileName = value;
                 OnPropertyChanged("FileName");
@@ -103,7 +103,7 @@ namespace NaUKMA.CS.Practice05
         public String ProcessOwner
         {
             get { return _processOwner; }
-            set
+            private set
             {
                 _processOwner = value;
                 OnPropertyChanged("ProcessOwner");
@@ -118,7 +118,7 @@ namespace NaUKMA.CS.Practice05
         public Double CpuPercent
         {
             get { return _cpuPercent; }
-            set
+            private set
             {
                 _cpuPercent = value;
                 OnPropertyChanged("CpuPercent");
@@ -133,7 +133,7 @@ namespace NaUKMA.CS.Practice05
         public Double RamMB
         {
             get { return _ramMB; }
-            set
+            private set
             {
                 _ramMB = value;
                 OnPropertyChanged("RamMB");
@@ -148,7 +148,7 @@ namespace NaUKMA.CS.Practice05
 
         }
 
-        public MyProcess(string processName, int processId, bool processResponding, int threadsCount, DateTime? startTime, string fileName, string processOwner, double cpuPercent, double ramMb)
+        internal MyProcess(string processName, int processId, bool processResponding, int threadsCount, DateTime? startTime, string fileName, string processOwner, double cpuPercent, double ramMb)
         {
             ProcessName = processName;
             ProcessId = processId;
